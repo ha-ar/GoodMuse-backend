@@ -16,6 +16,12 @@ Rails.application.routes.draw do
 			end
 
 			resources :events
+			resources :playlists do
+				collection do
+					post :add_song_to_playlist
+					get :view_playlist
+				end
+			end
 
 		end
 
