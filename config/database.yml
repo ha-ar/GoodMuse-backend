@@ -1,0 +1,16 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  database: good_muse
+  pool: 5
+  username: postgres
+  password: 123456
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: good_muse
+  pool: 5
+  username: postgres
+  password: 123456
