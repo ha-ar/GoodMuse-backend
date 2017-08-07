@@ -8,26 +8,22 @@ class Api::V1::UsersController < ApplicationController
     if params[:user]
 
       @user = User.find_by_email(params[:user][:email])
+
       if @user
         if @user.valid_password?(params[:user][:password])
-
           sign_in("user", @user)
-          render :json => {
-            :success => true,
-            :message => "Signed In Sucessfully"
-            }, status: 200
-
+          render :sign_user
           else
             render :json => {
               :success => false,
               :message => "Incorrect Password"
-            }
+            }, :status => 400
           end
         else
           render :json => {
             :success => false,
             message: "User not found"
-          }
+          }, :status => 400
         end
       else
 
@@ -47,18 +43,19 @@ class Api::V1::UsersController < ApplicationController
             render :json => {
               :success => false,
               :errors => @user.errors.full_messages.to_sentence
-            }
+            }, :status => 400
           end
         else
           render :json => {
             :error => "Role is not correct",
             :success => false
-          }
+          }, :status => 400
         end
       else
         render :json => {
+          :error => "Params Incorrect",
           :success => false
-        }
+        }, :status => 400
       end
 
     end
@@ -70,7 +67,7 @@ class Api::V1::UsersController < ApplicationController
         render :json => {
           :success => false,
           :errors => "User was not found"
-        }
+        }, :status => 400
       end
     end
 
@@ -86,13 +83,13 @@ class Api::V1::UsersController < ApplicationController
           render :json => {
             :success => false,
             :errors => @user.errors.full_messages.to_sentence
-          }
+          }, :status => 400
         end
       else
         render :json => {
           :success => false,
           :errors => "User was not found"
-        }
+        }, :status => 400
       end
     end
 
@@ -109,17 +106,20 @@ class Api::V1::UsersController < ApplicationController
 
           else
             render :json => {
+              :errors => "Unable to reset password",
               :success => false
               }, :status => 400
             end
           else
             render :json => {
-              :success => false
+              :success => false,
+              :errors => "User was not found"
               }, :status => 400
             end
           else
             render :json => {
-              :success => false
+              :success => false,
+              :error => "Params Incorrect",
               }, :status => 400
             end
           end
