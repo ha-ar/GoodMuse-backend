@@ -1,8 +1,9 @@
 class Api::V1::UsersController < ApplicationController
 
-  before_action :authenticate_user! ,  except: [:sign_user , :sign_up , :reset_password]
-  before_filter :get_user , only: [:update, :show]
-  
+  before_action :authenticate_user! ,  except: [:sign_user , :sign_up , :reset_password, :social_login]
+  before_filter :get_user , only: [:update, :show, :update_role]
+  skip_before_action :verify_authenticity_token
+
   
   def sign_user
     if params[:user]
@@ -123,6 +124,128 @@ class Api::V1::UsersController < ApplicationController
               }, :status => 400
             end
           end
+
+
+          def social_login
+            user_email = params[:user][:email]
+            user_name = params[:user][:username]
+            uid = params[:user][:social_id]
+            provider = params[:user][:social_type]
+            role = params[:user][:role]
+
+            @user = User.where(email: user_email).first
+            password = params[:user][:password]
+
+
+            if uid.present?
+              if (uid != "null" )
+                if @user.present?
+                  user_id = @user.id.to_s
+                  @user.update_attributes(:username => user_name, :uid => uid)
+                
+                  if provider.present?
+                    @user.update_attributes(:provider => provider)
+                  end
+                  sign_in("user", @user)
+                  render :social_login
+
+                else
+                  @user = User.new(:email => user_email, :uid => uid, :password => password)
+                  @user.save!
+
+                  if user_name.present?
+                    @user.update_attributes(:username => user_name)
+                  end
+                  
+                  if provider.present?
+                    @user.update_attributes(:provider => provider)
+                  end
+                  if role.present?
+                    @user.add_role role
+                  end
+                  
+                  @sign_up = true
+                  sign_in("user", @user)
+                  render :social_login
+
+                end
+              else
+                render :json => {:success => "false", :message => "User provider identity not present"}
+              end
+            else
+              render :json => {:success => "false", :message => "User provider identity not present"}
+            end
+          end
+
+
+          def user_login
+
+           if params[:user]
+
+            @user = User.find_by_email(params[:user][:email])
+
+            if @user.present?
+              if @user.valid_password?(params[:user][:password])
+                sign_in("user", @user)
+                render :user_login
+              else
+                render :json => {
+                  :success => false,
+                  :message => "Incorrect Password"
+                  }, :status => 400
+                end
+              else
+               if params[:user][:role] and (params[:user][:role] == 'dj' || params[:user][:role] == 'user')
+                @user =  User.new(user_params)
+                if @user.save
+
+                if params[:user][:role].present?
+                  @user.add_role params[:user][:role]
+                end
+                  
+                  sign_in("user", @user)
+                  @sign_up = true
+                  render :user_login
+                else
+                  render :json => {
+                    :success => false,
+                    :errors => @user.errors.full_messages.to_sentence
+                    }, :status => 400
+                  end
+                else
+                  render :json => {
+                    :error => "Role is not correct",
+                    :success => false
+                    }, :status => 400
+                  end
+                end
+              else
+                render :json => {
+                  :error => "Check Parameters!",
+                  :success => false
+                  }, :status => 400
+                end
+
+              end
+
+              def update_role
+
+                if params[:role]
+                  @user.add_role params[:role]
+                  render :json => {
+                    :error => "User Role updated sucessfully",
+                    :success => true
+                    }, :status => 400
+                  else
+                    render :json => {
+                      :error => "Check Parameters!",
+                      :success => false
+                      }, :status => 400
+                    end
+                  end
+
+
+
 
           private
 
