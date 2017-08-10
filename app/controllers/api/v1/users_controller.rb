@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
 
-  before_action :authenticate_user! ,  except: [:sign_user , :sign_up , :reset_password, :social_login]
-  before_filter :get_user , only: [:update, :show, :update_role]
+  before_action :authenticate_user! ,  except: [:sign_user , :sign_up , :reset_password, :social_login, :user_login]
+  before_filter :get_user , only: [:update, :user_detail, :update_role]
   skip_before_action :verify_authenticity_token
 
   
@@ -61,9 +61,9 @@ class Api::V1::UsersController < ApplicationController
 
     end
 
-    def show 
+    def user_detail 
       if !@user.blank?
-
+          render :show
       else
         render :json => {
           :success => false,

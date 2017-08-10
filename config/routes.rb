@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
 			resources :users, :except => [:create,  :update] do
 				collection do
+					get :user_detail
 					post :sign_up
 					get  :sign_user
 					post :update

@@ -1,6 +1,6 @@
 class Api::V1::PlaylistsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_filter :get_playlist , only: [:update, :view_playlist, :destroy]
+  before_filter :get_playlist , only: [:update, :view_playlist, :destroy, :playlist_matching]
   before_action :authenticate_user!
 
 
@@ -135,6 +135,37 @@ class Api::V1::PlaylistsController < ApplicationController
                 end
 
 
+              end
+
+
+
+              def playlist_matching
+
+                song_ids = @playlist.songs.pluck(:id)
+                count = song_ids.count
+                playlists = Playlist.all.where.not(user_id: @playlist.user_id )
+                playlist_hash = Hash.new{|hsh,key| hsh[key] = [] }
+                playlists.each do |playlist|
+                  playlist_song_ids = playlist.songs.pluck(:id)
+                  hash_value = (playlist_song_ids & song_ids).length
+                  playlist_hash[hash_value].push playlist
+
+                end
+                playlist = playlist_hash.map{ |value|
+                  puts value[0].inspect
+                  puts value[1].inspect
+                  {
+                    :matching_count => value[0],
+                    :playlists => value[1].map{ |list|
+                      {
+                        :id => list.id,
+                        :title => list.title
+                      }
+
+                     }
+                  }
+                }
+                render :json => {:playlist => playlist}
               end
 
               
