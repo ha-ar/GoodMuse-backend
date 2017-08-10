@@ -2,6 +2,7 @@
     json.id            @user.id
     json.email         @user.email
     json.username      @user.username
+    json.phone_number  @user.phone_number
     if  @user.roles.present?
       json.role          @user.roles.first.try(:name)
     end

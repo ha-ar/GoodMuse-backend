@@ -132,9 +132,10 @@ class Api::V1::UsersController < ApplicationController
             uid = params[:user][:social_id]
             provider = params[:user][:social_type]
             role = params[:user][:role]
+            phone_number = params[:user][:phone_number]
 
             @user = User.where(email: user_email).first
-            password = params[:user][:password]
+            password = Devise.friendly_token.first(8)
 
 
             if uid.present?
@@ -146,6 +147,9 @@ class Api::V1::UsersController < ApplicationController
                   if provider.present?
                     @user.update_attributes(:provider => provider)
                   end
+                  if phone_number.present?
+                    @user.update_attributes(:phone_number => phone_number)
+                  end
                   sign_in("user", @user)
                   render :social_login
 
@@ -155,6 +159,9 @@ class Api::V1::UsersController < ApplicationController
 
                   if user_name.present?
                     @user.update_attributes(:username => user_name)
+                  end
+                  if phone_number.present?
+                    @user.update_attributes(:phone_number => phone_number)
                   end
                   
                   if provider.present?
@@ -199,9 +206,9 @@ class Api::V1::UsersController < ApplicationController
                 @user =  User.new(user_params)
                 if @user.save
 
-                if params[:user][:role].present?
-                  @user.add_role params[:user][:role]
-                end
+                  if params[:user][:role].present?
+                    @user.add_role params[:user][:role]
+                  end
                   
                   sign_in("user", @user)
                   @sign_up = true
@@ -250,7 +257,7 @@ class Api::V1::UsersController < ApplicationController
           private
 
           def user_params
-            params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :provider, :uid)
+            params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :provider, :uid, :phone_number)
           end
 
 
