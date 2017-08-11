@@ -7,4 +7,9 @@ class User < ApplicationRecord
 
   has_many :playlists
 
+
+  def email_required?
+  	false
+  end
+
 end

@@ -127,34 +127,56 @@ class Api::V1::UsersController < ApplicationController
 
 
           def social_login
+
+            
             user_email = params[:user][:email]
             user_name = params[:user][:username]
             uid = params[:user][:social_id]
             provider = params[:user][:social_type]
             role = params[:user][:role]
             phone_number = params[:user][:phone_number]
-
-            @user = User.where(email: user_email).first
             password = Devise.friendly_token.first(8)
+
 
 
             if uid.present?
               if (uid != "null" )
+
+                if user_email.present?
+                  @user = User.find_by(email: user_email)
+                end
+                unless @user.present?
+                  @user = User.find_by(uid: uid, provider: provider)
+                end
+
                 if @user.present?
+                  
                   user_id = @user.id.to_s
                   @user.update_attributes(:username => user_name, :uid => uid)
-                
+
                   if provider.present?
                     @user.update_attributes(:provider => provider)
                   end
+                  
                   if phone_number.present?
                     @user.update_attributes(:phone_number => phone_number)
                   end
+                  
+                  if user_email.present? && !@user.email.present?
+                    @user.update_attributes(:email => user_email)
+                  end
+
                   sign_in("user", @user)
                   render :social_login
 
                 else
-                  @user = User.new(:email => user_email, :uid => uid, :password => password)
+
+                  if user_email.present?
+                    @user = User.new(:email => user_email, :uid => uid, :password => password, provider: provider)
+                  else
+                   @user = User.new(:uid => uid, provider: provider, :password => password)
+                 end
+
                   @user.save!
 
                   if user_name.present?
@@ -202,14 +224,13 @@ class Api::V1::UsersController < ApplicationController
                   }, :status => 400
                 end
               else
-               if params[:user][:role] and (params[:user][:role] == 'dj' || params[:user][:role] == 'user')
                 @user =  User.new(user_params)
                 if @user.save
 
-                  if params[:user][:role].present?
+                  if params[:user][:role] and (params[:user][:role] == 'dj' || params[:user][:role] == 'user')
                     @user.add_role params[:user][:role]
                   end
-                  
+
                   sign_in("user", @user)
                   @sign_up = true
                   render :user_login
@@ -217,12 +238,6 @@ class Api::V1::UsersController < ApplicationController
                   render :json => {
                     :success => false,
                     :errors => @user.errors.full_messages.to_sentence
-                    }, :status => 400
-                  end
-                else
-                  render :json => {
-                    :error => "Role is not correct",
-                    :success => false
                     }, :status => 400
                   end
                 end
