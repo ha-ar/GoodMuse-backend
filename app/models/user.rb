@@ -6,6 +6,7 @@ class User < ApplicationRecord
   :recoverable, :rememberable, :trackable, :validatable
 
   has_many :playlists
+  has_many :events
 
 
   def email_required?

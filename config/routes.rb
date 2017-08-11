@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 					post :sign_up
 					get  :sign_user
 					post :update
-					post :reset_password
+					post :forgot_password
 					post :rating
 					post :social_login
 					post :user_login

@@ -1,0 +1,2 @@
+class EventsPlaylists < ApplicationRecord
+end

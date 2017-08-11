@@ -1,4 +1,5 @@
 class Api::V1::EventsController < ApplicationController
+  skip_before_action :verify_authenticity_token
 
   before_filter :get_event , only: [:update, :show, :destroy]
   
@@ -21,10 +22,22 @@ class Api::V1::EventsController < ApplicationController
   def create 
     if params[:event]
       @event  = Event.new(event_params)
+
       if @event.save
+        if params[:event][:playlist_id]
+          playlist = Playlist.find_by(id: params[:event][:playlist_id])
+          if playlist.present?
+            events_playlists = EventsPlaylists.find_by(event_id: @event.id, playlist_id: playlist.id)
+            unless events_playlists.present?
+              events_playlists = EventsPlaylists.create(event_id: @event.id, playlist_id: playlist.id)
+            end
+          end
+        end
+
         render :json => {
           :success => true,
-          :event => @event
+          :event => @event,
+          :playlists => @event.playlists.first
         }
       else
         render :json => {
@@ -59,9 +72,23 @@ class Api::V1::EventsController < ApplicationController
   def update
     if !@event.blank?
       if @event.update(event_params)
+
+        if params[:event][:playlist_id]
+          playlist = Playlist.find_by(id: params[:event][:playlist_id])
+          if playlist.present?
+            old_playlist = EventsPlaylists.find_by(event_id: @event.id)
+            old_playlist.destroy
+            events_playlists = EventsPlaylists.find_by(event_id: @event.id, playlist_id: playlist.id)
+            unless events_playlists.present?
+              events_playlists = EventsPlaylists.create(event_id: @event.id, playlist_id: playlist.id)
+            end
+          end
+        end
+
         render :json => {
           :success => true,
-          :event => @event
+          :event => @event,
+          :playlists => @event.playlists.first
         }
       else
         render :json => {
@@ -97,7 +124,7 @@ class Api::V1::EventsController < ApplicationController
   private 
   
   def event_params
-    params.require(:event).permit(:name, :date, :venu_name, :address, :zip_code, :end_time, :price, :trainers_allowed, :upload_flyer, :playlist_tag)
+    params.require(:event).permit(:avatar, :user_id, :name, :date, :venu_name, :address, :zip_code, :end_time, :price, :trainers_allowed, :upload_flyer, :playlist_tag)
   end
   
   def get_event

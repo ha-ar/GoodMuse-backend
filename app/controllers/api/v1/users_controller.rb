@@ -96,15 +96,19 @@ class Api::V1::UsersController < ApplicationController
 
 
 
-    def reset_password
+    def forgot_password
       if params[:user][:email]
         @user = User.find_by_email(params[:user][:email])
         if @user
           raise ActiveRecord::RecordNotFound if not @user.present?
           password = SecureRandom.hex(4)
           if @user.update(:password => password)
-            UserMailer.reset_password(@user, password).deliver_now
-
+            # UserMailer.reset_password(@user, password).deliver_now
+            render :json => {
+              :message => "Password Changed Sucessfully",
+              :new_password => password,
+              :success => true
+              }
           else
             render :json => {
               :errors => "Unable to reset password",
@@ -114,7 +118,7 @@ class Api::V1::UsersController < ApplicationController
           else
             render :json => {
               :success => false,
-              :errors => "User was not found"
+              :errors => "Unable To Find User"
               }, :status => 400
             end
           else

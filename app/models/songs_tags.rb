@@ -1,0 +1,2 @@
+class SongsTags < ApplicationRecord
+end

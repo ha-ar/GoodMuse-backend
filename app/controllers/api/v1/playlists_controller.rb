@@ -109,11 +109,31 @@ class Api::V1::PlaylistsController < ApplicationController
                 singer_name = title.first
                 song_name = title.last
                 album = first.label.first
-                tag = first.genre.first
+                tags = []
+                first.genre.each do |tag|
+                  unless tags.include? tag
+                    tags << tag
+                  end
+                end
+
                 song = Song.find_by(name: song_name, artist_name: singer_name, album: album)
                 unless song.present?
                   song = Song.create(name: song_name, artist_name: singer_name, album: album)
                 end
+
+                if tags.present?
+                  tags.each do |tag|
+                    data_tag = Tag.find_by(name: tag)
+                    unless data_tag.present?
+                      data_tag = Tag.create(name: tag)
+                    end
+                    songs_tags = SongsTags.find_by(tag_id: data_tag.id, song_id: song.id)
+                    unless songs_tags.present?
+                      songs_tags = SongsTags.create(tag_id: data_tag.id, song_id: song.id)
+                    end
+                  end
+                end
+
                 playlistsong = PlaylistsSongs.find_by(playlist_id: @playlist.id, song_id: song.id)
                 unless playlistsong.present?
                   playlistsong = PlaylistsSongs.create(playlist_id: @playlist.id, song_id: song.id)
@@ -122,19 +142,13 @@ class Api::V1::PlaylistsController < ApplicationController
               end
 
               if @playlist && song
-                render :json => {
-                  :playlist => @playlist, 
-                  :songs => @playlist.songs, 
-                  :success => true
-                }
+                render :add_to_list
               else
                 render :json => {
                   :message => "Error while adding song to playlist.", 
                   :success => false
                   }, :status => 400
                 end
-
-
               end
 
 
