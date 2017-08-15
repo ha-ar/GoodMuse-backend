@@ -19,7 +19,11 @@ Rails.application.routes.draw do
 				end
 			end
 
-			resources :events
+			resources :events do 
+				collection do
+					get :view_event
+				end
+			end
 			resources :playlists do
 				collection do
 					post :add_song_to_playlist

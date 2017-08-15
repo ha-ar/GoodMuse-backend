@@ -1,7 +1,7 @@
 class Api::V1::EventsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
-  before_filter :get_event , only: [:update, :show, :destroy]
+  before_filter :get_event , only: [:update, :view_event, :destroy]
   
   def index
     @events  = Event.all
@@ -34,11 +34,7 @@ class Api::V1::EventsController < ApplicationController
           end
         end
 
-        render :json => {
-          :success => true,
-          :event => @event,
-          :playlists => @event.playlists.first
-        }
+        render :event
       else
         render :json => {
           :success => false,
@@ -54,12 +50,9 @@ class Api::V1::EventsController < ApplicationController
   end
 
 
-  def show
+  def view_event
     if !@event.blank?
-      render :json => {
-        :success => true,
-        :event => @event
-      }
+        render :event
     else
       render :json => {
         :success => false,
@@ -85,11 +78,7 @@ class Api::V1::EventsController < ApplicationController
           end
         end
 
-        render :json => {
-          :success => true,
-          :event => @event,
-          :playlists => @event.playlists.first
-        }
+        render :event
       else
         render :json => {
           :success => false,

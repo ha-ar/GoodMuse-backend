@@ -9,7 +9,7 @@ class Api::V1::PlaylistsController < ApplicationController
     if @user.present?
       @playlists  = @user.playlists
     else
-      @playlists  = Playlist.all
+      @playlists  = Playlist.where(is_dj: true)
     end
 
     if !@playlists.blank?
@@ -28,6 +28,11 @@ class Api::V1::PlaylistsController < ApplicationController
       if params[:playlist]
         @playlist  = Playlist.new(playlist_params)
         if @playlist.save
+          if @playlist.user.roles.first.try(:name) == "dj"
+            @playlist.update_attributes(:is_dj => true)
+          elsif @playlist.user.roles.first.try(:name) == "user"
+            @playlist.update_attributes(:is_dj => false)
+          end
           render :json => {
             :success => true,
             :playlist => @playlist
@@ -62,6 +67,11 @@ class Api::V1::PlaylistsController < ApplicationController
         def update
           if !@playlist.blank?
             if @playlist.update(playlist_params)
+              if @playlist.user.roles.first.try(:name) == "dj"
+                @playlist.update_attributes(:is_dj => true)
+              elsif @playlist.user.roles.first.try(:name) == "user"
+                @playlist.update_attributes(:is_dj => false)
+              end
               render :json => {
                 :success => true,
                 :playlist => @playlist
@@ -176,7 +186,7 @@ class Api::V1::PlaylistsController < ApplicationController
                         :title => list.title
                       }
 
-                     }
+                    }
                   }
                 }
                 render :json => {:playlist => playlist}

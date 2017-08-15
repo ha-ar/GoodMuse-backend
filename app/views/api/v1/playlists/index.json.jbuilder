@@ -3,7 +3,6 @@ json.playlists @playlists do |playlist|
 
   json.id            playlist.id
   json.title         playlist.title
-  json.songs         playlist.title
 
   json.dj  do
     json.id            playlist.user.id
