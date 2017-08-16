@@ -227,7 +227,7 @@ class Api::V1::UsersController < ApplicationController
                   :message => "Incorrect Password"
                   }, :status => 400
                 end
-              else
+              elsif params[:user][:username].present?
                 @user =  User.new(user_params)
                 if @user.save
 
@@ -244,6 +244,11 @@ class Api::V1::UsersController < ApplicationController
                     :errors => @user.errors.full_messages.to_sentence
                     }, :status => 400
                   end
+                else
+                   render :json => {
+                  :success => false,
+                  :message => "Incorrect Email"
+                  }, :status => 400
                 end
               else
                 render :json => {
