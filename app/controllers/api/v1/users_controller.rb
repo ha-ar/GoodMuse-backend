@@ -103,7 +103,8 @@ class Api::V1::UsersController < ApplicationController
                           raise ActiveRecord::RecordNotFound if not @user.present?
                           password = SecureRandom.hex(4)
                           if @user.update(:password => password)
-                            UserMailer.forgot_password(@user, password).deliver_now
+                            reset_token = @user.send(:set_reset_password_token)
+                            UserMailer.forgot_password(@user, password, reset_token).deliver_now
                             render :json => {
                               :message => "Password Changed Sucessfully",
                               :new_password => password,
