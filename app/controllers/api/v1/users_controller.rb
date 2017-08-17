@@ -104,10 +104,9 @@ class Api::V1::UsersController < ApplicationController
                           password = SecureRandom.hex(4)
                           if @user.update(:password => password)
                             reset_token = @user.send(:set_reset_password_token)
-                            UserMailer.forgot_password(@user, password, reset_token).deliver_now
+                            UserMailer.forgot_password(@user, reset_token).deliver_now
                             render :json => {
                               :message => "Password Changed Sucessfully",
-                              :new_password => password,
                               :success => true
                             }
                           else
