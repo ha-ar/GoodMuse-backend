@@ -103,8 +103,8 @@ class Api::V1::UsersController < ApplicationController
                           raise ActiveRecord::RecordNotFound if not @user.present?
                           password = SecureRandom.hex(4)
                           if @user.update(:password => password)
-                                   # UserMailer.reset_password(@user, password).deliver_now
-                           render :json => {
+                            UserMailer.forgot_password(@user, password).deliver_now
+                            render :json => {
                               :message => "Password Changed Sucessfully",
                               :new_password => password,
                               :success => true
@@ -234,6 +234,7 @@ class Api::V1::UsersController < ApplicationController
                                 if params[:user][:role] and (params[:user][:role] == 'dj' || params[:user][:role] == 'user')
                                   @user.add_role params[:user][:role]
                                 end
+                                UserMailer.sign_up(@user).deliver_now
 
                                 sign_in("user", @user)
                                 @sign_up = true

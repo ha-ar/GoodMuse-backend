@@ -83,4 +83,19 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.default_url_options = { host: 'https://goodmuse.herokuapp.com/' }
+
+  
+  config.action_mailer.smtp_settings = {
+    :user_name => 'ChefNest',
+    :password => 'nest2016',
+    :domain => 'sendgrid.com',
+    :address => 'smtp.sendgrid.net',
+    :port => 587,
+    :authentication => :plain,
+    :enable_starttls_auto => true
+  }
+
+
 end
