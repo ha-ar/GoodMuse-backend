@@ -22,6 +22,16 @@ Rails.application.routes.draw do
 			resources :events do 
 				collection do
 					get :view_event
+					get :upcoming_events
+					post :update_event
+
+				end
+			end
+			resources :searches do 
+				collection do
+					get :find_nearby_events
+					get :search_songs
+					get :search_djs
 				end
 			end
 			resources :playlists do
@@ -29,6 +39,7 @@ Rails.application.routes.draw do
 					post :add_song_to_playlist
 					get :view_playlist
 					get :playlist_matching
+					get :user_playlists
 				end
 			end
 

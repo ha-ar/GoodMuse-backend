@@ -14,6 +14,7 @@ gem 'devise'
 gem "rolify"
 gem 'discogs-wrapper'
 gem "paperclip"
+gem 'geocoder'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets

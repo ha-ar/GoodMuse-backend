@@ -192,6 +192,22 @@ class Api::V1::PlaylistsController < ApplicationController
                 render :json => {:playlist => playlist}
               end
 
+             def user_playlists
+                @user = User.find_by_id(params[:id])
+                if @user.present?
+                  @playlists  = @user.playlists
+                end
+                if !@playlists.blank?
+                  render :index
+                else
+                  render :json => {
+                    :success => false,
+                    :errors => "There Are No Playlist Present"
+                    }, :status => 400
+                  end
+                end
+
+
               
               private 
               
