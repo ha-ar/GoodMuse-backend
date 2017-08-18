@@ -33,10 +33,49 @@ class Api::V1::PlaylistsController < ApplicationController
           elsif @playlist.user.roles.first.try(:name) == "user"
             @playlist.update_attributes(:is_dj => false)
           end
-          render :json => {
-            :success => true,
-            :playlist => @playlist
-          }
+
+          if params[:playlist][:songs].present?
+            songs = params[:playlist][:songs].split(',')
+            @discogs = Discogs::Wrapper.new("good_muse", user_token: "RlQwfjOhAfeTdYpudXPTFtasEyrAlSbRiAyHOqBZ")
+            songs.each do |song|
+              search  = @discogs.search(song,:type => :release)
+              if search.results.present?
+                first = search.results.first
+                title = first.title.split(' - ')
+                singer_name = title.first
+                song_name = title.last
+                album = first.label.first
+                tags = []
+                first.genre.each do |tag|
+                  unless tags.include? tag
+                    tags << tag
+                  end
+                end
+                song = Song.find_by(name: song_name, artist_name: singer_name, album: album)
+                unless song.present?
+                  song = Song.create(name: song_name, artist_name: singer_name, album: album)
+                end
+                if tags.present?
+                  tags.each do |tag|
+                    data_tag = Tag.find_by(name: tag)
+                    unless data_tag.present?
+                      data_tag = Tag.create(name: tag)
+                    end
+                    songs_tags = SongsTags.find_by(tag_id: data_tag.id, song_id: song.id)
+                    unless songs_tags.present?
+                      songs_tags = SongsTags.create(tag_id: data_tag.id, song_id: song.id)
+                    end
+                  end
+                end
+                playlistsong = PlaylistsSongs.find_by(playlist_id: @playlist.id, song_id: song.id)
+                unless playlistsong.present?
+                  playlistsong = PlaylistsSongs.create(playlist_id: @playlist.id, song_id: song.id)
+                end
+              end
+            end
+          end
+
+          render :playlist
         else
           render :json => {
             :success => false,
@@ -91,7 +130,7 @@ class Api::V1::PlaylistsController < ApplicationController
             end
 
 
-            
+
             def destory
               if @playlist && @playlist.destroy
                 render :json => {
@@ -192,7 +231,7 @@ class Api::V1::PlaylistsController < ApplicationController
                 render :json => {:playlist => playlist}
               end
 
-             def user_playlists
+              def user_playlists
                 @user = User.find_by_id(params[:id])
                 if @user.present?
                   @playlists  = @user.playlists
@@ -208,14 +247,14 @@ class Api::V1::PlaylistsController < ApplicationController
                 end
 
 
-              
-              private 
-              
-              def playlist_params
-                params.require(:playlist).permit(:title, :user_id)
+
+                private 
+
+                def playlist_params
+                  params.require(:playlist).permit(:title, :user_id)
+                end
+
+                def get_playlist
+                  @playlist = Playlist.find_by_id(params[:id])
+                end
               end
-              
-              def get_playlist
-                @playlist = Playlist.find_by_id(params[:id])
-              end
-            end
