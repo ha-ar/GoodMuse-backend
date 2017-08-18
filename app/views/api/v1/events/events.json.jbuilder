@@ -1,5 +1,5 @@
 
-json.event  @events.each do |event|
+json.events  @events.each do |event|
 
   json.id                 event.id
   json.name               event.name
