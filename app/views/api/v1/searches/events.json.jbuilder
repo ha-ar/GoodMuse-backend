@@ -1,5 +1,5 @@
 
-json.event  @nearby_events do |event|
+json.events  @nearby_events do |event|
 
   json.id                 event.id
   json.name               event.name
