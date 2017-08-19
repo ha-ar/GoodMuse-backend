@@ -7,6 +7,7 @@ json.playlists @playlists do |playlist|
   json.dj  do
     json.id            playlist.user.id
     json.email         playlist.user.email
+    json.username      playlist.user.username
   end
 
   json.songs playlist.songs do |song|
