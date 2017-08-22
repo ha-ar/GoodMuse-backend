@@ -6,6 +6,7 @@
     if  @user.roles.present?
       json.role          @user.roles.first.try(:name)
     end
+    json.avatar        @user.avatar
     json.provider      @user.provider
     json.uid           @user.uid
     json.created_at    @user.created_at

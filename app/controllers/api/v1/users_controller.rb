@@ -7,7 +7,6 @@ class Api::V1::UsersController < ApplicationController
   
   def sign_user
     if params[:user]
-
       @user = User.find_by_email(params[:user][:email])
 
       if @user
@@ -227,7 +226,7 @@ class Api::V1::UsersController < ApplicationController
                                 :message => "Incorrect Email Or Password."
                                 }, :status => 400
                               end
-                            elsif params[:user][:username].present?
+                            elsif params[:user][:email].present? && params[:user][:password].present? 
                               @user =  User.new(user_params)
                               if @user.save
 
@@ -263,30 +262,33 @@ class Api::V1::UsersController < ApplicationController
                             def update_role
 
                               if params[:role]
-                                @user.add_role params[:role]
+                                if @user.roles.present?
+                                 @user.roles = []
+                               end
+                               @user.add_role params[:role]
+                               render :json => {
+                                :message => "User Role updated sucessfully",
+                                :success => true
+                                }, :status => 400
+                              else
                                 render :json => {
-                                  :message => "User Role updated sucessfully",
-                                  :success => true
+                                  :message => "Check Parameters!",
+                                  :success => false
                                   }, :status => 400
-                                else
-                                  render :json => {
-                                    :message => "Check Parameters!",
-                                    :success => false
-                                    }, :status => 400
-                                  end
-                                end
-
-
-
-
-                                private
-
-                                def user_params
-                                  params.require(:user).permit(:address, :first_name, :last_name, :username, :email, :password, :provider, :uid, :phone_number)
-                                end
-
-
-                                def get_user 
-                                  @user = User.find_by_id(params[:id])
                                 end
                               end
+
+
+
+
+                              private
+
+                              def user_params
+                                params.require(:user).permit(:avatar, :address, :first_name, :last_name, :username, :email, :password, :provider, :uid, :phone_number)
+                              end
+
+
+                              def get_user 
+                                @user = User.find_by_id(params[:id])
+                              end
+                            end

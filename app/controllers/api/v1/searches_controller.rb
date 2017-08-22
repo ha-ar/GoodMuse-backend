@@ -46,17 +46,22 @@ class Api::V1::SearchesController < ApplicationController
     search = params[:search]
     if search
      @users = User.with_role(:dj).where("first_name || ' ' || last_name ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ?", search+'%', search+'%', search+'%')
-        # @users = User.where("first_name || ' ' || last_name ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ?", search+'%', search+'%', search+'%')
-        # current_user_playlist = current_user.playlists.first
-        # @song_ids = current_user_playlist.songs.present? ? current_user_playlist.songs.pluck(:id) : nil
-        render :djs
+     current_user_playlist = current_user.playlists.first
+     if current_user_playlist.present?
+       @song_ids = current_user_playlist.songs.present? ? current_user_playlist.songs.pluck(:id) : 0
+       @song_count = current_user_playlist.songs.present? ? current_user_playlist.songs.count : 0
+     else
+       @song_ids = []
+       @song_count = []
+     end
+     render :djs
 
-      else
-        render :json => {
-          :success => false,
-          :message => "No Song Found."
-          }, :status => 400
-        end
-      end
-
+   else
+    render :json => {
+      :success => false,
+      :message => "No Song Found."
+      }, :status => 400
     end
+  end
+
+end
