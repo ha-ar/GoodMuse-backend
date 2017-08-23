@@ -97,5 +97,15 @@ Rails.application.configure do
     :enable_starttls_auto => true
   }
 
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_credentials: {
+      bucket: "elslearning",
+      access_key_id: "AKIAIIFEKC27VTIBGJNA",
+      secret_access_key: "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",
+      s3_region: "us-east-1",
+    }
+  }
+
 
 end
