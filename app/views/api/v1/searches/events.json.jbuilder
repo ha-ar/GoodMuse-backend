@@ -3,7 +3,8 @@ json.events  @nearby_events do |event|
 
   json.id                 event.id
   json.name               event.name
-  json.date               event.date
+  json.start_time         event.start_time
+  json.end_time           event.end_time
   json.venu_name          event.venu_name
   json.address            event.address
   json.zip_code           event.zip_code
