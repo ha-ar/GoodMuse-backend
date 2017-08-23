@@ -8,7 +8,8 @@
 	<%= link_to('Login', new_user_session_path)  %>  
 </li>
 <% end %>
-
+<%= image_tag Event.last.avatar.url %>
+<%= image_tag User.last.avatar.url %>
 <!-- <script type="text/javascript">
 
 	$(document).ready(function() {
