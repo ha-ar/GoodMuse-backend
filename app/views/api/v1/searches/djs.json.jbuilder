@@ -21,7 +21,7 @@
       json.id                   latest_event.try(:id)
       json.name                 latest_event.try(:name)
       json.date                 latest_event.date.present? ? latest_event.date.strftime("%d-%m-%Y") : ""
-      json.avatar               latest_event.avatar.present? ? root_url + latest_event.avatar.url : ""
+      json.avatar               latest_event.avatar.present? ? latest_event.avatar.url : ""
       json.percentage_match     percentage_value
 
     end

@@ -9,7 +9,7 @@ json.event  do
   json.zip_code           @event.zip_code
   json.price              @event.price
   json.trainers_allowed   @event.trainers_allowed
-  json.avatar             @event.avatar.present? ? root_url + @event.avatar.url : ""
+  json.avatar             @event.avatar.present? ? @event.avatar.url : ""
   json.latitude           @event.latitude
   json.longitude          @event.longitude
   json.created_at         @event.created_at
