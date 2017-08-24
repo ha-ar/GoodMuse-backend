@@ -13,7 +13,7 @@ class Api::V1::SongsController < ApplicationController
     else
       render :json => {
         :success => false,
-        :errors => "There Are No Song Present"
+        :message => "There Are No Song Present"
       }, :status => 400
     end
   end
@@ -28,13 +28,13 @@ class Api::V1::SongsController < ApplicationController
       else
         render :json => {
           :success => false,
-          :errors => @song.errors.full_messages.to_sentence
+          :message => @song.errors.full_messages.to_sentence
         }, :status => 400
       end
     else
       render :json => {
         :success => false,
-        :errors => "Check Params"
+        :message => "Check Params"
       }, :status => 400
     end
   end
@@ -46,7 +46,7 @@ class Api::V1::SongsController < ApplicationController
     else
       render :json => {
         :success => false,
-        :errors => "Song was not found"
+        :message => "Song was not found"
         }, :status => 400
       end
     end
@@ -60,13 +60,13 @@ class Api::V1::SongsController < ApplicationController
       else
         render :json => {
           :success => false,
-          :errors => @song.errors.full_messages.to_sentence
+          :message => @song.errors.full_messages.to_sentence
         }, :status => 400
       end
     else
       render :json => {
         :success => false,
-        :errors => "Unable To Find Song"
+        :message => "Unable To Find Song"
       }, :status => 400
     end
   end

@@ -18,7 +18,7 @@ class Api::V1::PlaylistsController < ApplicationController
     else
       render :json => {
         :success => false,
-        :errors => "There Are No Playlist Present"
+        :message => "There Are No Playlist Present"
         }, :status => 400
       end
     end
@@ -79,13 +79,13 @@ class Api::V1::PlaylistsController < ApplicationController
         else
           render :json => {
             :success => false,
-            :errors => @playlist.errors.full_messages.to_sentence
+            :message => @playlist.errors.full_messages.to_sentence
             }, :status => 400
           end
         else
           render :json => {
             :success => false,
-            :errors => "Check Params"
+            :message => "Check Params"
             }, :status => 400
           end
         end
@@ -98,7 +98,7 @@ class Api::V1::PlaylistsController < ApplicationController
         else
           render :json => {
             :success => false,
-            :errors => "Playlist was not found"
+            :message => "Playlist was not found"
             }, :status => 400
           end
         end
@@ -113,18 +113,19 @@ class Api::V1::PlaylistsController < ApplicationController
               end
               render :json => {
                 :success => true,
+                :message => "Playlist Updated Sucessfully.",
                 :playlist => @playlist
               }
             else
               render :json => {
                 :success => false,
-                :errors => @playlist.errors.full_messages.to_sentence
+                :message => @playlist.errors.full_messages.to_sentence
                 }, :status => 400
               end
             else
               render :json => {
                 :success => false,
-                :errors => "Unable To Find Playlist"
+                :message => "Unable To Find Playlist"
                 }, :status => 400
               end
             end
@@ -241,7 +242,7 @@ class Api::V1::PlaylistsController < ApplicationController
                 else
                   render :json => {
                     :success => false,
-                    :errors => "There Are No Playlist Present"
+                    :message => "There Are No Playlist Present"
                     }, :status => 400
                   end
                 end

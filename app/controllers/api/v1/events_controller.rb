@@ -13,7 +13,7 @@ class Api::V1::EventsController < ApplicationController
     else
       render :json => {
         :success => false,
-        :errors => "There Are No Event Present"
+        :message => "There Are No Event Present"
       }, :status => 400
     end
   end
@@ -38,13 +38,13 @@ class Api::V1::EventsController < ApplicationController
       else
         render :json => {
           :success => false,
-          :errors => @event.errors.full_messages.to_sentence
+          :message => @event.errors.full_messages.to_sentence
         }, :status => 400
       end
     else
       render :json => {
         :success => false,
-        :errors => "Check Params"
+        :message => "Check Params"
       }, :status => 400
     end
   end
@@ -56,7 +56,7 @@ class Api::V1::EventsController < ApplicationController
     else
       render :json => {
         :success => false,
-        :errors => "Event was not found"
+        :message => "Event was not found"
         }, :status => 400
       end
     end
@@ -82,13 +82,13 @@ class Api::V1::EventsController < ApplicationController
       else
         render :json => {
           :success => false,
-          :errors => @event.errors.full_messages.to_sentence
+          :message => @event.errors.full_messages.to_sentence
         }, :status => 400
       end
     else
       render :json => {
         :success => false,
-        :errors => "Unable To Find Event"
+        :message => "Unable To Find Event"
       }, :status => 400
     end
   end
@@ -113,13 +113,13 @@ class Api::V1::EventsController < ApplicationController
       else
         render :json => {
           :success => false,
-          :errors => @event.errors.full_messages.to_sentence
+          :message => @event.errors.full_messages.to_sentence
         }, :status => 400
       end
     else
       render :json => {
         :success => false,
-        :errors => "Unable To Find Event"
+        :message => "Unable To Find Event"
       }, :status => 400
     end
   end
