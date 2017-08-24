@@ -2,7 +2,7 @@
 json.song  do
 
   json.id                 @song.id
-  json.name               @song.name
+  json.song_name               @song.name
   json.artist_name        @song.artist_name
   json.album              @song.album
   
