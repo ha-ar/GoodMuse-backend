@@ -1,6 +1,6 @@
 class Api::V1::SongsController < ApplicationController
   skip_before_action :verify_authenticity_token
-
+  #before_action :authenticate_user!
   before_filter :get_song , only: [:update, :show, :destroy]
   
   def index

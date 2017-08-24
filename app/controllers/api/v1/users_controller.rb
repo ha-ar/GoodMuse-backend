@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
 
-  before_action :authenticate_user! ,  except: [:sign_user , :sign_up , :forgot_password, :social_login, :user_login]
+  #before_action :authenticate_user! ,  except: [:sign_user , :sign_up , :forgot_password, :social_login, :user_login]
   before_filter :get_user , only: [:update, :user_detail, :update_role]
   skip_before_action :verify_authenticity_token
 

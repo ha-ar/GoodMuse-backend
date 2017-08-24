@@ -1,6 +1,6 @@
 class Api::V1::EventsController < ApplicationController
   skip_before_action :verify_authenticity_token
-
+  #before_action :authenticate_user!
   before_filter :get_event , only: [:update_event, :view_event, :destroy]
   
   def index
