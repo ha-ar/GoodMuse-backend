@@ -1,7 +1,7 @@
 class Api::V1::PlaylistsController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_filter :get_playlist , only: [:update, :view_playlist, :destroy, :playlist_matching]
-  before_action :authenticate_user!
+  #before_action :authenticate_user!
 
 
   def index
