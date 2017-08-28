@@ -158,7 +158,7 @@ class Api::V1::EventsController < ApplicationController
 
 
                     def upcoming_events
-                      @events  = Event.where("start_time >= ?", Date.today)
+                      @events  = Event.where("start_time >= ?", Date.today).limit(10)
                       if @events.present?
                         render :events
                       else

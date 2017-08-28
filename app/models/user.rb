@@ -9,7 +9,7 @@ class User < ApplicationRecord
   :default_url => "/images/:style/missing.png",
   :storage => :s3,
   :url => 's3_domain_url',
-  :s3_host_alias => 'elslearning.s3-website-us-east-1.amazonaws.com'
+  :s3_host_alias => 'goodmuse.s3-website-us-east-1.amazonaws.com'
 
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
 
