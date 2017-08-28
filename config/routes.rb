@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
 	devise_for :users
 	root 'home#index'
+	resources :events do
+		collection do
+			get :my_events
+		end
+	end
+	resources :playlists
 
 	namespace :api, defaults: {format: :json} do
 		scope module: :v1 do
@@ -21,6 +27,7 @@ Rails.application.routes.draw do
 
 			resources :events do 
 				collection do
+					get :my_events
 					get :view_event
 					get :upcoming_events
 					post :update_event

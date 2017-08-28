@@ -169,14 +169,26 @@ class Api::V1::EventsController < ApplicationController
                         end
                       end
 
+                      def my_events
+                        @events  = current_user.events
+                        if @events.present?
+                          render :events
+                        else
+                          render :json => {
+                            :message => "Events Not Found.", 
+                            :success => false
+                            }, :status => 400
+                          end
+                        end
 
-                      private 
 
-                      def event_params
-                        params.require(:event).permit(:user_id, :name, :start_time, :venu_name, :address, :zip_code, :end_time, :price, :trainers_allowed, :upload_flyer, :playlist_tag, :longitude, :latitude)
+                        private 
+
+                        def event_params
+                          params.require(:event).permit(:user_id, :name, :start_time, :venu_name, :address, :zip_code, :end_time, :price, :trainers_allowed, :upload_flyer, :playlist_tag, :longitude, :latitude)
+                        end
+
+                        def get_event
+                          @event = Event.find_by_id(params[:id])
+                        end
                       end
-
-                      def get_event
-                        @event = Event.find_by_id(params[:id])
-                      end
-                    end
