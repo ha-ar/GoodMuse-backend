@@ -189,6 +189,13 @@ class Api::V1::UsersController < ApplicationController
                                   @user.update_attributes(:phone_number => phone_number)
                                 end
 
+                                if params[:user][:avatar]
+                                  content_type = Mime::Type.lookup_by_extension(File.extname(params[:user][:avatar])[1..-1]).to_s
+                                  image_file = Paperclip.io_adapters.for("data:#{content_type};base64,#{params[:user][:avatar]}")
+                                  image_file.original_filename = params[:user][:avatar]
+                                  @user.update_attributes(:avatar => image_file)
+                                end
+
                                 if provider.present?
                                   @user.update_attributes(:provider => provider)
                                 end
@@ -233,6 +240,14 @@ class Api::V1::UsersController < ApplicationController
                                 if params[:user][:role] and (params[:user][:role] == 'dj' || params[:user][:role] == 'user')
                                   @user.add_role params[:user][:role]
                                 end
+
+                                if params[:user][:avatar]
+                                  content_type = Mime::Type.lookup_by_extension(File.extname(params[:user][:avatar])[1..-1]).to_s
+                                  image_file = Paperclip.io_adapters.for("data:#{content_type};base64,#{params[:user][:avatar]}")
+                                  image_file.original_filename = params[:user][:avatar]
+                                  @user.update_attributes(:avatar => image_file)
+                                end
+
                                 UserMailer.sign_up(@user).deliver_now
 
                                 sign_in("user", @user)
@@ -284,7 +299,7 @@ class Api::V1::UsersController < ApplicationController
                               private
 
                               def user_params
-                                params.require(:user).permit(:avatar, :address, :first_name, :last_name, :username, :email, :password, :provider, :uid, :phone_number)
+                                params.require(:user).permit(:address, :first_name, :last_name, :username, :email, :password, :provider, :uid, :phone_number)
                               end
 
 
