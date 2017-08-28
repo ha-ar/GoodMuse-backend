@@ -173,7 +173,7 @@ class Api::V1::EventsController < ApplicationController
                         if params[:id].present?
                           @user = User.find_by_id(params[:id])
                           if @user.present?
-                            @events  = @user_user.events
+                            @events  = @user.events
                             if @events.present?
                               render :events
                             else
