@@ -1,0 +1,99 @@
+<div class="container">
+
+  <!-- Page content -->
+  <div class="page-content">
+
+    <!-- Main content -->
+    <div class="content-wrapper clear">
+
+
+
+      <div class="panel panel-flat">
+        <p>
+          <strong>Name:</strong>
+          <%= @event.name %>
+        </p>
+
+        <p>
+          <strong> latitude:</strong>
+          <%= @event.user.email %>
+        </p>
+
+        <p>
+          <strong> Start Time:</strong>
+          <%= @event.start_time %>
+        </p>
+
+        <p>
+          <strong> end_time:</strong>
+          <%= @event.end_time %>
+        </p>
+
+        <p>
+          <strong> venu_name:</strong>
+          <%= @event.venu_name %>
+        </p>
+
+        <p>
+          <strong> address:</strong>
+          <%= @event.address %>
+        </p>
+
+        <p>
+          <strong> zip_code:</strong>
+          <%= @event.zip_code %>
+        </p>
+
+        <p>
+          <strong> price:</strong>
+          <%= @event.price %>
+        </p>
+
+        <p>
+          <strong> trainers_allowed:</strong>
+          <%= @event.trainers_allowed %>
+        </p>
+
+        <p>
+          <strong> longitude:</strong>
+          <%= @event.longitude %>
+        </p>
+
+        <p>
+          <strong> latitude:</strong>
+          <%= @event.latitude %>
+        </p>
+
+        <p>
+          <strong> Image:</strong>
+          <%= image_tag @event.avatar.url %>
+        </p>
+
+
+        <strong> playlists:</strong>
+        <% @playlists.each do |playlist| %>
+        <p>
+          <strong>  <%= playlist.title %></strong>
+
+        </p>
+        <% playlist.songs.each do |song| %>
+        <p>
+          <%= song.name %>
+        </p>
+        <% end %>
+
+        <% end %>
+
+
+
+        <% if current_user ==  @event.user %>
+
+        <%= link_to 'Edit', edit_event_path(@event), :class => 'btn btn-default' %> 
+        <%= link_to 'Destroy',  event_path(@event), :class => 'btn btn-default',  method: :delete, data: { confirm: 'Are you sure?' } %>   
+        <% end %>
+        <%= link_to 'Back', events_path, :class => 'btn btn-default' %>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="container">
+
+  <!-- Page content -->
+  <div class="page-content">
+
+    <!-- Main content -->
+    <div class="content-wrapper clear">
+
+
+
+      <div class="panel panel-flat">
+
+
+
+        <p>
+          <strong>  <%= @playlist.title %></strong>
+
+        </p>
+        <% @playlist.songs.each do |song| %>
+        <p>
+          <%= song.name %>
+        </p>
+
+        <% end %>
+
+
+
+
+        <%= link_to 'Edit', edit_playlist_path(@playlist), :class => 'btn btn-default' %> 
+        <%= link_to 'Destroy',  playlist_path(@playlist), :class => 'btn btn-default',  method: :delete, data: { confirm: 'Are you sure?' } %>   
+        <%= link_to 'Back', playlists_path, :class => 'btn btn-default' %>
+
+      </div>
+    </div>
+  </div>
+</div>

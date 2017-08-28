@@ -1,0 +1,18 @@
+<% flash.each do |type, message| %>
+    <% unless message.blank? %>
+        <%if type == 'notice' %>
+            <div class="alert alert-success span_">
+        <% else %>
+            <div class="alert alert-error span_">
+        <% end %>
+        <a href="#" id = "close_x" class="close" data-dismiss="alert">&times;</a>
+        <%= message %>
+        </div>
+    <% end %>
+<% end %>
+
+<script type="text/javascript">
+    $(function() {
+        $('.flash').addClass('expand');
+    });
+</script>

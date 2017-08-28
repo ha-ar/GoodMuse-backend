@@ -1,0 +1,78 @@
+
+<div class="col-md-12">
+
+  <div class="col-md-6 col-md-offset-3">
+
+    <div class="form-group">
+      <%= f.label :title %>
+      <%= f.text_field :title , :class => "form-control" %>
+    </div>
+
+
+    <div class="form-group">
+      <div style="vertical-align: middle; " >
+        <% if @playlist.present? and @playlist.songs.present? %>
+        <%= f.label :songs %>
+        <% @playlist.songs.each do |song| %>
+        <br> <%= song.name %>
+        <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-group">
+
+
+<div id='TextBoxesGroup'>
+  <div id="TextBoxDiv1">
+    <label>Song #1 : </label><input type='textbox' name='songs[]' >
+  </div>
+</div>
+<input type='button' value='Add' id='addButton'>
+<input type='button' value='Remove' id='removeButton'>
+   </div>
+
+
+ </div>
+</div>
+
+<div class="col-md-6 col-md-offset-3">
+  <div class="col-lg-3" style="float: right">
+    <button name="Submit" value="Submit" class=" btn btn-block btn-primary">Submit</button>
+  </div>
+  <div class="col-lg-3" style="float: left">
+    <a href="<%= playlists_url%> " class="btn btn-block btn-danger" >Back </a>
+  </div>
+</div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    var counter = 2;
+    $("#addButton").click(function () {
+  if(counter>10){
+            alert("Only 10 textboxes allow");
+            return false;
+  }
+  var newTextBoxDiv = $(document.createElement('div'))
+       .attr("id", 'TextBoxDiv' + counter);
+  newTextBoxDiv.after().html('<label>Song #'+ counter + ' : </label>' +
+        '<input type="text" name="songs[]" value="" >');
+
+  newTextBoxDiv.appendTo("#TextBoxesGroup");
+  counter++;
+     });
+     $("#removeButton").click(function () {
+  if(counter==1){
+          alert("No more textbox to remove");
+          return false;
+       }
+  counter--;
+        $("#TextBoxDiv" + counter).remove();
+     });
+  });
+</script>

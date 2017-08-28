@@ -1,0 +1,80 @@
+
+<div class="col-md-12">
+
+    <div class="col-md-6 col-md-offset-3">
+
+        <div class="form-group">
+            <%= f.label :name %>
+            <%= f.text_field :name , :class => "form-control" %>
+        </div>
+
+        <div class="form-group">
+            <%= f.label :address %>
+            <%= f.text_field :address , :class => "form-control"%>
+        </div>
+
+        <div class="form-group">
+           <%= f.label :start_time %>
+           <%= f.datetime_select :start_time , :class => "form-control"%>
+       </div>
+       <div class="form-group">
+           <%= f.label :end_time %>
+           <%= f.datetime_select :end_time , :class => "form-control"%>
+       </div>
+
+       <div class="form-group">
+          <%= f.label :trainers_allowed %>
+          <%= f.check_box :trainers_allowed , :class => "form-control"%>
+      </div>
+
+      <div class="form-group">
+       <%= f.label :zip_code %>
+       <%= f.text_field :zip_code , :class => "form-control"%>
+   </div>
+
+   <div class="form-group">
+      <%= f.label :venu_name %>
+      <%= f.text_field :venu_name , :class => "form-control"%>
+  </div>
+
+  <div class="form-group">
+     <%= f.label :price %>
+     <%= f.text_field :price , :class => "form-control"%>
+ </div>
+
+ <div class="form-group">
+     <%= f.label :playlist %>
+     <div class="select-style form-control">
+     <%= f.collection_select(:playlist_ids, @playlists, :id, :title, {:include_blank => 'Select Datacenter'}, html_options = {:class=>"form-control"}) %>
+    </div>
+</div>
+
+<div class="form-group">
+    <div style="vertical-align: middle; " >
+        <% if @event.present? and @event.avatar.present? %>
+        <%= image_tag @event.avatar.url(:large), :style => 'max-width: 400px;' , :class => "img-thumbnail"%>
+        <% end %>
+    </div>
+    <%= f.file_field :avatar , :class => "form-control" %>
+</div>
+
+</div>
+</div>
+
+<div class="col-md-6 col-md-offset-3">
+    <div class="col-lg-3" style="float: right">
+        <button name="Submit" value="Submit" class=" btn btn-block btn-primary">Submit</button>
+    </div>
+    <div class="col-lg-3" style="float: left">
+        <a href="<%= my_events_events_url%> " class="btn btn-block btn-danger" >Back </a>
+    </div>
+</div>
+</div>
+
+
+
+<!-- 
+t.integer  "user_id"
+t.string   "longitude"
+t.string   "latitude"
+ -->
