@@ -1,7 +1,7 @@
 class Api::V1::EventsController < ApplicationController
   skip_before_action :verify_authenticity_token
   #before_action :authenticate_user!
-  before_filter :get_event , only: [:update_event, :view_event, :destroy]
+  before_filter :get_event , only: [:update_event, :view_event, :delete_event]
   
   def index
     @events  = Event.all
@@ -162,7 +162,7 @@ class Api::V1::EventsController < ApplicationController
 
 
 
-                def destory
+                def delete_event
                   if @event && @event.destroy
                     render :json => {
                       :message => "Event Deleted.", 

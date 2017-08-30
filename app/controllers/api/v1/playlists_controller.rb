@@ -1,6 +1,6 @@
 class Api::V1::PlaylistsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_filter :get_playlist , only: [:update, :view_playlist, :destroy, :playlist_matching]
+  before_filter :get_playlist , only: [:update_playlist, :view_playlist, :delete_playlist, :playlist_matching]
   #before_action :authenticate_user!
 
 
@@ -104,19 +104,54 @@ class Api::V1::PlaylistsController < ApplicationController
         end
       end
 
-      def update
+      def update_playlist
         if !@playlist.blank?
           if @playlist.update(playlist_params)
-            if @playlist.user.roles.first.try(:name) == "dj"
-              @playlist.update_attributes(:is_dj => true)
-            elsif @playlist.user.roles.first.try(:name) == "user"
-              @playlist.update_attributes(:is_dj => false)
+            
+
+            if params[:playlist][:songs].present?
+              songs = params[:playlist][:songs].split("@!")
+              @discogs = Discogs::Wrapper.new("good_muse", user_token: "RlQwfjOhAfeTdYpudXPTFtasEyrAlSbRiAyHOqBZ")
+              songs.each do |song|
+                search  = @discogs.search(song,:type => :release)
+                if search.results.present?
+                  first = search.results.first
+                  title = first.title.split(' - ')
+                  singer_name = title.first
+                  song_name = title.last
+                  album = first.label.first
+                  tags = []
+                  first.genre.each do |tag|
+                    unless tags.include? tag
+                      tags << tag
+                    end
+                  end
+                  song = Song.find_by(name: song_name, artist_name: singer_name, album: album)
+                  unless song.present?
+                    song = Song.create(name: song_name, artist_name: singer_name, album: album)
+                  end
+                  if tags.present?
+                    tags.each do |tag|
+                      data_tag = Tag.find_by(name: tag)
+                      unless data_tag.present?
+                        data_tag = Tag.create(name: tag)
+                      end
+                      songs_tags = SongsTags.find_by(tag_id: data_tag.id, song_id: song.id)
+                      unless songs_tags.present?
+                        songs_tags = SongsTags.create(tag_id: data_tag.id, song_id: song.id)
+                      end
+                    end
+                  end
+                  playlistsong = PlaylistsSongs.find_by(playlist_id: @playlist.id, song_id: song.id)
+                  unless playlistsong.present?
+                    playlistsong = PlaylistsSongs.create(playlist_id: @playlist.id, song_id: song.id)
+                  end
+                end
+              end
             end
-            render :json => {
-              :success => true,
-              :message => "Playlist Updated Sucessfully.",
-              :playlist => @playlist
-            }
+
+
+            render :playlist
           else
             render :json => {
               :success => false,
@@ -133,7 +168,7 @@ class Api::V1::PlaylistsController < ApplicationController
 
 
 
-          def destory
+          def delete_playlist
             if @playlist && @playlist.destroy
               render :json => {
                 :message => "Playlist Deleted.", 

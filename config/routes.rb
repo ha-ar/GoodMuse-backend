@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 					get :view_event
 					get :upcoming_events
 					post :update_event
+					post :delete_event
 
 				end
 			end
@@ -47,6 +48,9 @@ Rails.application.routes.draw do
 					get :view_playlist
 					get :playlist_matching
 					get :user_playlists
+					post :delete_playlist
+					post :update_playlist
+
 				end
 			end
 
