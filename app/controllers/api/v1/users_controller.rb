@@ -338,41 +338,41 @@ class Api::V1::UsersController < ApplicationController
                                     :message => "User was not found"
                                     }, :status => 400
                                   end
-                               end
+                                end
 
 
 
 
-                              private
+                                private
 
-                              def user_params
-                                params.require(:user).permit(:address, :first_name, :last_name, :username, :email, :password, :provider, :uid, :phone_number)
+                                def user_params
+                                  params.require(:user).permit(:address, :first_name, :last_name, :username, :email, :password, :provider, :uid, :phone_number)
+                                end
+
+
+                                def get_user 
+                                  @user = User.find_by_id(params[:id])
+                                end
+
+
+                                def send_notification(registration_id, title, message)
+                                  fcm = FCM.new("AIzaSyAR5uhnaYL83DrfwUA06JEPexnWWeWsWJk")
+
+                                  registration_ids = registration_id
+
+                                  options = {}
+                                  options[:notification] = {}
+                                  options[:notification][:title] = title
+                                  options[:notification][:body] = message
+                                  options[:content_available] = true
+                                  options[:data] = {
+                                    title: title,
+                                    message: message
+                                  }
+
+                                  options[:priority] = "high"
+
+                                  @response = fcm.send(registration_ids, options)
+                                end
+
                               end
-
-
-                              def get_user 
-                                @user = User.find_by_id(params[:id])
-                              end
-
-
-                              def send_notification(registration_id, title, message)
-                                fcm = FCM.new("AIzaSyAR5uhnaYL83DrfwUA06JEPexnWWeWsWJk")
-
-                                registration_ids = registration_id
-
-                                options = {}
-                                options[:notification] = {}
-                                options[:notification][:title] = title
-                                options[:notification][:body] = message
-                                options[:content_available] = true
-                                options[:data] = {
-                                  title: title,
-                                  message: message
-                                }
-
-                                options[:priority] = "high"
-
-                                @response = fcm.send(registration_ids, options)
-                              end
-
-                            end
