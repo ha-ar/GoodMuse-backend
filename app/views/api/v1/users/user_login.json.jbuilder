@@ -4,6 +4,7 @@
     json.username      @user.username
     json.role          @user.roles.first.try(:name)
     json.avatar        @user.avatar.present? ? "http:" + @user.avatar.url : ""
+    json.fcm_key       @user.fcm_key
     json.created_at    @user.created_at
     json.updated_at    @user.updated_at
   end

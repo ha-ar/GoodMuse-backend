@@ -9,6 +9,7 @@
     json.avatar        @user.avatar.present? ? "http:" + @user.avatar.url : ""
     json.provider      @user.provider
     json.uid           @user.uid
+    json.fcm_key       @user.fcm_key
     json.created_at    @user.created_at
     json.updated_at    @user.updated_at
   end
