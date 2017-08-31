@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
 
   #before_action :authenticate_user! ,  except: [:sign_user , :sign_up , :forgot_password, :social_login, :user_login]
-  before_filter :get_user , only: [:update, :user_detail, :update_role]
+  before_filter :get_user , only: [:update, :user_detail, :update_role, :set_fcm_key]
   skip_before_action :verify_authenticity_token
   require 'fcm'
 
@@ -321,6 +321,25 @@ class Api::V1::UsersController < ApplicationController
                                 end
                               end
 
+                              def set_fcm_key
+
+                                if !@user.blank?
+                                 if params[:fcm_key].present?
+                                  @user.update_attribute(:fcm_key, params[:fcm_key])
+                                end
+
+                                render :json => {
+                                  :success => true,
+                                  :message => "FCM Key Updated Sucessfully"
+                                  }, status: 200
+                                else
+                                  render :json => {
+                                    :success => false,
+                                    :message => "User was not found"
+                                    }, :status => 400
+                                  end
+                               end
+
 
 
 
@@ -337,7 +356,7 @@ class Api::V1::UsersController < ApplicationController
 
 
                               def send_notification(registration_id, title, message)
-                                fcm = FCM.new("AIzaSyDg8a6tAiMg_WI2TuXVJ9mFOk0D3rUYDcM")
+                                fcm = FCM.new("AIzaSyAR5uhnaYL83DrfwUA06JEPexnWWeWsWJk")
 
                                 registration_ids = registration_id
 

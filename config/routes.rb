@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 					post :social_login
 					post :user_login
 					post :update_role
+					post :set_fcm_key
 				end
 			end
 
