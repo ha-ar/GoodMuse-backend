@@ -108,7 +108,9 @@ class Api::V1::PlaylistsController < ApplicationController
         if !@playlist.blank?
           if @playlist.update(playlist_params)
             
-
+            if @playlist.songs.present?
+              @playlist.songs.destroy_all
+            end
             if params[:playlist][:songs].present?
               songs = params[:playlist][:songs].split("@!")
               @discogs = Discogs::Wrapper.new("good_muse", user_token: "RlQwfjOhAfeTdYpudXPTFtasEyrAlSbRiAyHOqBZ")
