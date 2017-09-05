@@ -9,7 +9,7 @@ class Api::V1::SearchesController < ApplicationController
     @events = Event.all
     @events.each do |event|
 
-      if Geocoder::Calculations.distance_between([params[:latitude].to_i,params[:longitude].to_i], [event.latitude.to_i,event.longitude.to_i], :units => :km).round(2) < 10
+      if Geocoder::Calculations.distance_between([params[:latitude].to_f,params[:longitude].to_f], [event.latitude.to_f,event.longitude.to_f], :units => :km).round(2) < 10
         @nearby_events << event
       end
     end
