@@ -18,12 +18,11 @@ class Api::V1::SearchesController < ApplicationController
         end
       end
     end
-
     
     if params[:user_id].present? 
-      user = User.find_by_id(params[:user_id])
-      if user.present?
-        user_playlist = user.playlists.first
+      @user = User.find_by_id(params[:user_id])
+      if @user.present?
+        user_playlist = @user.playlists.first
         if user_playlist.present?
           user_song_ids = user_playlist.songs.present? ? user_playlist.songs.pluck(:id) : 0
           user_playlist_event = []
@@ -37,66 +36,71 @@ class Api::V1::SearchesController < ApplicationController
            end
          end
          @nearby_events = user_playlist_event
+         render :user_events and return
        else
-         @nearby_events = []
-       end
-     else
-      @nearby_events = []
+         render :json => {
+          :success => false,
+          :message => "User Playlist Not Found."
+          }, :status => 400 and return
+        end
+      else
+       render :json => {
+        :success => false,
+        :message => "User Not Found."
+        }, :status => 400 and return
+      end
+    end
+
+    if @nearby_events.present?
+      render :events
+    else
+      render :json => {
+        :success => false,
+        :message => "No Events Found Nearby."
+        }, :status => 400
+      end
+    end
+
+  end
+
+
+  def search_songs
+   @discogs = Discogs::Wrapper.new("good_muse", user_token: "RlQwfjOhAfeTdYpudXPTFtasEyrAlSbRiAyHOqBZ")
+   search = @discogs.search(params[:song_name],:type => :release)
+   @results = search.results
+
+   if @results.present?
+    render :songs
+  else
+    render :json => {
+      :success => false,
+      :message => "No Song Found."
+      }, :status => 400
     end
   end
 
 
+  def search_djs
+    search = params[:search]
+    if search
+     @users = User.with_role(:dj).where("first_name || ' ' || last_name ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ?", search+'%', search+'%', search+'%')
+     current_user_playlist = current_user.playlists.first
+     if current_user_playlist.present?
+       @song_ids = current_user_playlist.songs.present? ? current_user_playlist.songs.pluck(:id) : 0
+       @song_count = current_user_playlist.songs.present? ? current_user_playlist.songs.count : 0
+     else
+       @song_ids = []
+       @song_count = []
+     end
+     render :djs
 
-
-  if @nearby_events.present?
-    render :events
-  else
+   else
     render :json => {
       :success => false,
-      :message => "No Events Found Nearby."
+      :message => "No Song Found."
       }, :status => 400
     end
   end
 
 end
 
-
-def search_songs
- @discogs = Discogs::Wrapper.new("good_muse", user_token: "RlQwfjOhAfeTdYpudXPTFtasEyrAlSbRiAyHOqBZ")
- search = @discogs.search(params[:song_name],:type => :release)
- @results = search.results
-
- if @results.present?
-  render :songs
-else
-  render :json => {
-    :success => false,
-    :message => "No Song Found."
-    }, :status => 400
-  end
-end
-
-
-def search_djs
-  search = params[:search]
-  if search
-   @users = User.with_role(:dj).where("first_name || ' ' || last_name ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ?", search+'%', search+'%', search+'%')
-   current_user_playlist = current_user.playlists.first
-   if current_user_playlist.present?
-     @song_ids = current_user_playlist.songs.present? ? current_user_playlist.songs.pluck(:id) : 0
-     @song_count = current_user_playlist.songs.present? ? current_user_playlist.songs.count : 0
-   else
-     @song_ids = []
-     @song_count = []
-   end
-   render :djs
-
- else
-  render :json => {
-    :success => false,
-    :message => "No Song Found."
-    }, :status => 400
-  end
-end
-
-end

@@ -24,5 +24,14 @@ class Event < ApplicationRecord
 		end 
 	end
 
+	def is_going(user_id)
+		gong_statusa = GoingStatus.find_by(event_id: self.id, user_id: user_id)
+		if gong_statusa.present?
+			gong_statusa.going_status
+		else
+			false
+		end
+	end
+
 
 end
