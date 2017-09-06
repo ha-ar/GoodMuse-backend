@@ -5,7 +5,7 @@ class UserMailer < ApplicationMailer
 		@user = user
 		@token = token
 		mail(to: @user.email, 
-			subject: 'Forgot Paassword Email.'
+			subject: 'Forgot Password Email.'
 			)
 	end
 

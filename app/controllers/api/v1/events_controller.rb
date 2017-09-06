@@ -21,12 +21,12 @@ class Api::V1::EventsController < ApplicationController
 
     def create 
 
-      # puts "sssssssssssssssssss"
-      # puts params[:event][:avatar].inspect
-      # puts "sssssssssssssssssss"
-      # puts params.inspect
-      # puts "sssssssssssssssssss"
-      # ssssssssss
+      puts "1111111111111111111111111111111111111111111111111111111111111111111111111"
+      puts params[:event][:avatar].inspect
+      puts "2222222222222222222222222222222222222222222222222222222222222222222222222"
+      puts params.inspect
+      puts "3333333333333333333333333333333333333333333333333333333333333333333333333"
+      ssssssssss
 
       if params[:event]
         @event  = Event.new(event_params)
