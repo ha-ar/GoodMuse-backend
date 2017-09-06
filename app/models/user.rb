@@ -15,10 +15,21 @@ class User < ApplicationRecord
 
   has_many :playlists
   has_many :events
+  has_many :going_statuses
 
 
   def email_required?
   	false
+  end
+
+  def image_url    
+    if self.avatar.present?    
+      image_url = self.avatar    
+      path = URI.parse(URI.encode(self.avatar.url.to_s))
+      path = "http://" + path.host + path.path
+    else
+      ""
+    end 
   end
 
 end

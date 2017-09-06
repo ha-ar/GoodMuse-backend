@@ -20,7 +20,7 @@ class Api::V1::EventsController < ApplicationController
 
 
     def create 
-      
+
 
       if params[:event]
         @event  = Event.new(event_params)
@@ -67,6 +67,8 @@ class Api::V1::EventsController < ApplicationController
 
         def view_event
           if !@event.blank?
+            @image = URI.parse(URI.encode(@event.avatar.url.to_s))
+            @image = "http://" + @image.host + @image.path
             render :event
           else
             render :json => {

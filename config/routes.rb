@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 					get :user_detail
 					post :sign_up
 					get  :sign_user
-					post :update
+					post :update_user
 					post :forgot_password
 					post :rating
 					post :social_login
@@ -54,6 +54,10 @@ Rails.application.routes.draw do
 
 				end
 			end
+			
+			resources :songs 
+			resources :going_statuses 
+
 
 		end
 

@@ -6,7 +6,7 @@
     if  @user.roles.present?
       json.role          @user.roles.first.try(:name)
     end
-    json.avatar        @user.avatar.present? ? "http:" + @user.avatar.url : ""
+    json.avatar        @user.image_url
     json.provider      @user.provider
     json.uid           @user.uid
     json.fcm_key       @user.fcm_key

@@ -22,7 +22,7 @@
       json.name                 latest_event.try(:name)
       json.start_time           latest_event.start_time
       json.end_time             latest_event.end_time
-      json.avatar               latest_event.avatar.present? ? "http:" + latest_event.avatar.url : ""
+      json.avatar               latest_event.image_url
       json.percentage_match     percentage_value
 
     end
