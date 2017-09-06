@@ -178,7 +178,8 @@ class Api::V1::EventsController < ApplicationController
 
 
                   def upcoming_events
-                    @events  = Event.where("start_time >= ?", Date.today).limit(10).offset(params[:offset])
+                    offset_value = params[:offset].to_i * 10
+                    @events  = Event.where("start_time >= ?", Date.today).limit(10).offset(offset_value).order("start_time ASC")
 
                     if @events.present?
                       render :events
