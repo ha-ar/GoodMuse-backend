@@ -33,12 +33,13 @@ Rails.application.routes.draw do
 					get :upcoming_events
 					post :update_event
 					post :delete_event
-
+					get :going_to_events
 				end
 			end
 			resources :searches do 
 				collection do
 					get :find_nearby_events
+					get :find_nearby_going_events
 					get :search_songs
 					get :search_djs
 				end

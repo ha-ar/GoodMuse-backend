@@ -7,7 +7,7 @@ class EventsController < ApplicationController
   end
 
   def my_events
-    @events = Event.all
+    @events = current_user.events
   end
 
   def new
