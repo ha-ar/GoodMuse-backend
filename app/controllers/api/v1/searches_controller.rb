@@ -116,7 +116,7 @@ class Api::V1::SearchesController < ApplicationController
         @events = []
         statuses  = @user.going_statuses
         statuses.each do |status|
-          if status.event.start_time.present?
+          if status.event.start_time.present? && status.going_status
             @events << status.event
           end
         end
