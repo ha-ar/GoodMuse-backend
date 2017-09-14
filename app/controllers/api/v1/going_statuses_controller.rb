@@ -23,17 +23,20 @@ class Api::V1::GoingStatusesController < ApplicationController
     if params[:going_status]
       @going_status  = GoingStatus.new(going_status_params)
 
+      old_going_status = GoingStatus.where(event_id: params[:going_status][:event_id],user_id: params[:going_status][:user_id])
+      if old_going_status.present?
+        old_going_status.destroy_all
+      end
+
       if @going_status.save
         render :going_status
       else
-        aaaa
         render :json => {
           :success => false,
           :message => @going_status.errors.full_messages.to_sentence
         }, :status => 400
       end
     else
-      ccc
       render :json => {
         :success => false,
         :message => "Check Params"
@@ -73,8 +76,6 @@ class Api::V1::GoingStatusesController < ApplicationController
     end
   end
 
-
-  
   def destory
     if @going_status && @going_status.destroy
       render :json => {
@@ -89,7 +90,36 @@ class Api::V1::GoingStatusesController < ApplicationController
       end
     end
 
-  
+    def is_going
+      if params[:event_id].present? && params[:user_id].present?
+        @going_status = GoingStatus.where(event_id: params[:event_id],user_id: params[:user_id]).first
+        if @going_status.present?
+          if @going_status.going_status
+            render :json => {
+              :is_going => true, 
+              :success => true
+            }
+          else
+            render :json => {
+              :is_going => false, 
+              :success => true
+            }
+          end
+        else
+          render :json => {
+            :is_going => false, 
+            :success => false
+            }, :status => 400
+          end
+        else
+          render :json => {
+            :success => false,
+            :message => "Check Params"
+            }, :status => 400
+          end
+        end
+
+
     private 
 
     def going_status_params
