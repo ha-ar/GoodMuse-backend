@@ -13,6 +13,7 @@ json.events  @events.each do |event|
   json.avatar             event.image_url
   json.latitude           event.latitude
   json.longitude          event.longitude
+  json.is_going           going_status(event.id, @user.id)
   json.created_at         event.created_at
   json.updated_at         event.updated_at
 
@@ -27,10 +28,6 @@ json.events  @events.each do |event|
     json.title         event.playlists.first.try(:title)
   end
 
-  json.going_status  do
-    json.is_going   going_status(event.id, @user.id)
-  end
-  
 end
 
 json.success true
