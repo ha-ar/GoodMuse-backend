@@ -235,9 +235,8 @@ class Api::V1::EventsController < ApplicationController
                               end
                             end
                             if @events.present?
-                              # @events = @events.order("start_time ASC")
                               @events = @events.sort_by(&:start_time)
-                              render :events
+                              render :going_to_events
                             else
                               render :json => {
                                 :message => "No Events Found.", 
