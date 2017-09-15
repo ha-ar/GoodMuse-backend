@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 					get :find_nearby_going_events
 					get :search_songs
 					get :search_djs
+					get :match_playlist_event
 				end
 			end
 			resources :playlists do

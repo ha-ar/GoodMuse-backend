@@ -151,8 +151,7 @@ class Api::V1::PlaylistsController < ApplicationController
                 end
               end
             end
-
-
+            @playlist = Playlist.find_by_id(params[:id])
             render :playlist
           else
             render :json => {

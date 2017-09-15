@@ -109,8 +109,6 @@ class Api::V1::SearchesController < ApplicationController
     if params[:user_id].present? 
       @user = User.find_by_id(params[:user_id])
       if @user.present?
-
-
        if params[:longitude].present? && params[:latitude].present?
         @nearby_events = []
         @events = []
@@ -173,6 +171,49 @@ class Api::V1::SearchesController < ApplicationController
 
   end
 
+  def match_playlist_event
 
+    @events = Event.all
+    user_playlist = Playlist.find_by_id(params[:id])
+    if user_playlist.present?
+     @user = user_playlist.user
+     user_song_ids = user_playlist.songs.present? ? user_playlist.songs.pluck(:id) : 0
+     user_playlist_event = []
+     @events.each do |event|
+      if event.playlists.present? && event.playlists.first.songs.present?
+        event_song_ids = event.playlists.first.songs.pluck(:id)
+        value = (event_song_ids & user_song_ids).length
+        if value > 0
+          if event.start_time.present?
+           user_playlist_event << event
+         end
+       end
+     end
+   end
+
+   @events = user_playlist_event.sort_by(&:start_time)
+   if user_playlist.present?
+     @song_ids = user_playlist.songs.present? ? user_playlist.songs.pluck(:id) : 0
+     @song_count = user_playlist.songs.present? ? user_playlist.songs.count : 0
+   else
+     @song_ids = []
+     @song_count = []
+   end
+
+   if @events.present?
+     render :match_playlist_events
+   else
+    render :json => {
+      :success => false,
+      :message => "No Events Found."
+      }, :status => 400
+    end
+  else
+    render :json => {
+      :success => false,
+      :message => "No Playlist Not Found"
+      }, :status => 400
+    end
+  end
 end
 
