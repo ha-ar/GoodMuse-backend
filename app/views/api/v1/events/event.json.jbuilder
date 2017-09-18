@@ -11,6 +11,7 @@ json.event  do
   json.price              @event.price
   json.trainers_allowed   @event.trainers_allowed
   json.avatar             @event.image_url
+  json.avatar2             @event.image_2_url
   json.latitude           @event.latitude
   json.longitude          @event.longitude
   json.created_at         @event.created_at

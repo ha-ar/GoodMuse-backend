@@ -101,8 +101,8 @@ Rails.application.configure do
     storage: :s3,
     s3_credentials: {
       bucket: "goodmuse",
-      access_key_id: "AKIAIRMIGO4XNW5PYQKA",
-      secret_access_key: "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",
+      access_key_id: "AKIAJIXD53GWOMCUWJ2A",
+      secret_access_key: "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",
       s3_region: "us-east-1",
     }
   }

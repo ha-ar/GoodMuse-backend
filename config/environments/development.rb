@@ -52,16 +52,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.paperclip_defaults = {
-    storage: :s3,
-    s3_credentials: {
-      bucket: "goodmuse",
-      access_key_id: "AKIAIRMIGO4XNW5PYQKA",
-      secret_access_key: "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",
-      s3_region: "us-east-1",
-    }
-  }
-
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000}
   
   
@@ -74,5 +64,17 @@ Rails.application.configure do
     :authentication => :plain,
     :enable_starttls_auto => true
   }
+
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_credentials: {
+      bucket: "goodmuse",
+      access_key_id: "AKIAJIXD53GWOMCUWJ2A",
+      secret_access_key: "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",
+      s3_region: "us-east-1",
+    }
+  }
+
+
   
 end

@@ -23,6 +23,7 @@
       json.start_time           latest_event.start_time
       json.end_time             latest_event.end_time
       json.avatar               latest_event.image_url
+      json.avatar2               latest_event.image_2_url
       json.percentage_match     percentage_value
 
     end

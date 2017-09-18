@@ -58,6 +58,15 @@
     <%= f.file_field :avatar , :class => "form-control" %>
 </div>
 
+<div class="form-group">
+    <div style="vertical-align: middle; " >
+        <% if @event.present? and @event.avatar2.present? %>
+        <%= image_tag @event.avatar2.url(:large), :style => 'max-width: 400px;' , :class => "img-thumbnail"%>
+        <% end %>
+    </div>
+    <%= f.file_field :avatar2 , :class => "form-control" %>
+</div>
+
 </div>
 </div>
 
