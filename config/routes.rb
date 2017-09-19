@@ -58,6 +58,11 @@ Rails.application.routes.draw do
 			end
 			
 			resources :songs 
+			resources :questions do
+				collection do
+					get :view_question
+				end
+			end
 			resources :going_statuses do
 				collection do
 					get :is_going
