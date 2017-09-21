@@ -215,5 +215,29 @@ class Api::V1::SearchesController < ApplicationController
       }, :status => 400
     end
   end
-end
+
+  def events_search
+    search = params[:name]
+    if search
+      @nearby_events = Event.where("name ILIKE ?", '%'+search+'%')
+      if @nearby_events.present?
+        render :events
+      else
+        render :json => {
+          :success => false,
+          :message => "No Events Found."
+          }, :status => 400
+        end
+      else
+        render :json => {
+          :success => false,
+          :message => "Check Params"
+          }, :status => 400
+        end
+
+      end
+
+
+
+    end
 

@@ -43,6 +43,7 @@ Rails.application.routes.draw do
 					get :search_songs
 					get :search_djs
 					get :match_playlist_event
+					get :events_search
 				end
 			end
 			resources :playlists do
