@@ -244,7 +244,7 @@ class Api::V1::UsersController < ApplicationController
 
                      if params[:user]
 
-                      @user = User.find_by_email(params[:user][:email])
+                      @user = User.find_by_email(params[:user][:email].downcase)
 
                       if @user.present?
                         if @user.valid_password?(params[:user][:password])
