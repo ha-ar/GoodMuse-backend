@@ -26,9 +26,18 @@ class User < ApplicationRecord
   end
 
   def image_url    
-    if self.avatar.present?    
+    if self.avatar.present?
+      puts "ssssssssssssssssssssssssssssss"    
+      puts self.avatar.url    
+      puts "ssssssssssssssssssssssssssssss"    
       path = URI.parse(URI.encode(self.avatar.url.to_s))
+      puts "ssssssssssssssssssssssssssssss"    
+      puts path    
+      puts "ssssssssssssssssssssssssssssss"    
       path = "http:" + path.to_s
+      puts "ssssssssssssssssssssssssssssss"    
+      puts path    
+      puts "ssssssssssssssssssssssssssssss"    
     else
       ""
     end 
