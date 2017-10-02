@@ -210,13 +210,13 @@ class Api::V1::UsersController < ApplicationController
                             end
 
                             if params[:user][:avatar]
-                              base64_url = params[:user][:avatar]
-                              start = base64_url.index ';base64,'
-                              content_type = base64_url[5..start-1]
-                              encoded_picture = base64_url[(start+8)..-1]
-                              image = Paperclip.io_adapters.for("data:#{content_type};base64,#{encoded_picture}")
-                              image.original_filename = "test.png"
-                              @user.update_attributes(:avatar => image)
+                              # base64_url = params[:user][:avatar]
+                              # start = base64_url.index ';base64,'
+                              # content_type = base64_url[5..start-1]
+                              # encoded_picture = base64_url[(start+8)..-1]
+                              # image = Paperclip.io_adapters.for("data:#{content_type};base64,#{encoded_picture}")
+                              # image.original_filename = "test.png"
+                              @user.update_attributes(:avatar => params[:user][:avatar])
                             end
 
                             if provider.present?
