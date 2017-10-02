@@ -22,6 +22,9 @@ class User < ApplicationRecord
   	false
   end
 
+  def will_save_change_to_email?
+  end
+
   def image_url    
     if self.avatar.present?    
       path = URI.parse(URI.encode(self.avatar.url.to_s))
