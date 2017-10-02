@@ -37,7 +37,8 @@ class User < ApplicationRecord
       path = "http:" + path.to_s
       puts "ssssssssssssssssssssssssssssss"    
       puts path    
-      puts "ssssssssssssssssssssssssssssss"    
+      puts "ssssssssssssssssssssssssssssss"
+      path    
     else
       ""
     end 
