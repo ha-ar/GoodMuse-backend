@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 					get :search_djs
 					get :match_playlist_event
 					get :events_search
+					get :genre_events_search
 				end
 			end
 			resources :playlists do
@@ -69,6 +70,7 @@ Rails.application.routes.draw do
 					get :is_going
 				end
 			end
+			resources :genres, :only => [:index]
 
 
 		end

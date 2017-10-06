@@ -24,6 +24,10 @@ json.events  @events do |event|
     json.username      event.user.username
   end
 
+  json.genre do
+    json.id            event.genre_event.try(:id)
+    json.title         event.genre_event.try(:title)
+  end
 
   if event.playlists.present? && @song_count.present?
     playlist_song_ids = event.playlists.first.songs.pluck(:id)

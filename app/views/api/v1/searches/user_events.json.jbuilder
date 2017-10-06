@@ -28,6 +28,12 @@ json.events  @nearby_events do |event|
     json.id            event.playlists.first.try(:id)
     json.title         event.playlists.first.try(:title)
   end
+
+  json.genre do
+    json.id            event.genre_event.try(:id)
+    json.title         event.genre_event.try(:title)
+  end
+
 end
 
 json.success true

@@ -238,6 +238,32 @@ class Api::V1::SearchesController < ApplicationController
       end
 
 
+      def genre_events_search
+        search = params[:genre_id]
+        if search
+          if params[:user_id].present?
+            @nearby_events = Event.where(genre_event_id: search, user_id: params[:user_id])
+          else
+            @nearby_events = Event.where(genre_event_id: search)
+          end
+          if @nearby_events.present?
+            render :events
+          else
+            render :json => {
+              :success => false,
+              :message => "No Events Found."
+              }, :status => 400
+            end
+          else
+            render :json => {
+              :success => false,
+              :message => "Check Params"
+              }, :status => 400
+            end
 
-    end
+          end
+
+
+
+        end
 

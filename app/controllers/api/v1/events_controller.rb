@@ -79,8 +79,12 @@ class Api::V1::EventsController < ApplicationController
 
         def view_event
           if !@event.blank?
-            @image = URI.parse(URI.encode(@event.avatar.url.to_s))
-            @image = "http://" + @image.host + @image.path
+            if @event.avatar.present?
+              @image = URI.parse(URI.encode(@event.avatar.url.to_s))
+              @image = "http://" + @image.host + @image.path
+            else
+              @image = nil
+            end
             render :event
           else
             render :json => {
@@ -243,7 +247,7 @@ class Api::V1::EventsController < ApplicationController
                           private 
 
                           def event_params
-                            params.require(:event).permit(:user_id, :name, :start_time, :venu_name, :address, :zip_code, :end_time, :price, :trainers_allowed, :upload_flyer, :playlist_tag, :longitude, :latitude)
+                            params.require(:event).permit(:genre_event_id, :user_id, :name, :start_time, :venu_name, :address, :zip_code, :end_time, :price, :trainers_allowed, :upload_flyer, :playlist_tag, :longitude, :latitude)
                           end
 
                           def get_event
