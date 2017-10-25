@@ -82,7 +82,7 @@ class Api::V1::SearchesController < ApplicationController
 
   def search_djs
     search = params[:search]
-    if search
+    if search && current_user
      @users = User.with_role(:dj).where("first_name || ' ' || last_name ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ?", search+'%', search+'%', search+'%')
      current_user_playlist = current_user.playlists.first
      if current_user_playlist.present?
@@ -218,52 +218,58 @@ class Api::V1::SearchesController < ApplicationController
 
   def events_search
     search = params[:name]
-    if search
+    search_date = params[:date]
+    if search && search_date
+      @nearby_events = Event.where("name ILIKE ? ANDmmm  DATE(start_time) =? ",  '%'+search+'%', search_date)
+    elsif search
       @nearby_events = Event.where("name ILIKE ?", '%'+search+'%')
-      if @nearby_events.present?
-        render :events
-      else
-        render :json => {
-          :success => false,
-          :message => "No Events Found."
-          }, :status => 400
-        end
-      else
-        render :json => {
-          :success => false,
-          :message => "Check Params"
-          }, :status => 400
-        end
+    elsif search_date
+     @nearby_events = Event.where("DATE(start_time) =? ", search_date)
+   else
+     render :json => {
+      :success => false,
+      :message => "Check Params"
+      }, :status => 400 and return
+    end
 
+    if @nearby_events.present?
+      render :events and return
+    else
+      render :json => {
+        :success => false,
+        :message => "No Events Found."
+        }, :status => 400 and return
       end
 
+    end
 
-      def genre_events_search
-        search = params[:genre_id]
-        if search
-          if params[:user_id].present?
-            @nearby_events = Event.where(genre_event_id: search, user_id: params[:user_id])
-          else
-            @nearby_events = Event.where(genre_event_id: search)
+
+    def genre_events_search
+      search = params[:genre_id]
+      if search
+        if params[:user_id].present?
+          @nearby_events = Event.where(genre_event_id: search, user_id: params[:user_id])
+        else
+          @nearby_events = Event.where(genre_event_id: search)
+        end
+        if @nearby_events.present?
+          render :events
+        else
+          render :json => {
+            :success => false,
+            :message => "No Events Found."
+            }, :status => 400
           end
-          if @nearby_events.present?
-            render :events
-          else
-            render :json => {
-              :success => false,
-              :message => "No Events Found."
-              }, :status => 400
-            end
-          else
-            render :json => {
-              :success => false,
-              :message => "Check Params"
-              }, :status => 400
-            end
-
+        else
+          render :json => {
+            :success => false,
+            :message => "Check Params"
+            }, :status => 400
           end
-
-
 
         end
+
+
+
+      end
 

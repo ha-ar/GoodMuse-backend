@@ -8,7 +8,7 @@
 
     latest_event = user.events.where("date >= ?", Date.today).first
 
-    if latest_event.playlists.present? && @song_count.present?
+    if latest_event.present? && latest_event.playlists.present? && @song_count.present?
       playlist_song_ids = latest_event.playlists.first.songs.pluck(:id)
       hash_value = (playlist_song_ids & @song_ids).length
       percentage_value = ((hash_value.to_f / @song_count.to_f) * 100).round(1)
@@ -20,10 +20,10 @@
     json.event  do
       json.id                   latest_event.try(:id)
       json.name                 latest_event.try(:name)
-      json.start_time           latest_event.start_time
-      json.end_time             latest_event.end_time
-      json.avatar               latest_event.image_url
-      json.avatar2               latest_event.image_2_url
+      json.start_time           latest_event.try(:start_time)
+      json.end_time             latest_event.try(:end_time)
+      json.avatar               latest_event.try(:image_url)
+      json.avatar2               latest_event.try(:image_2_url)
       json.percentage_match     percentage_value
 
     end
