@@ -1,5 +1,5 @@
   json.followers  @followers.each do |follow|
-    user = follow.user
+    user = follow.follower
     json.id            user.id
     json.email         user.email
     json.first_name    user.first_name

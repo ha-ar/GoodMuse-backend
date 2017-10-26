@@ -220,7 +220,7 @@ class Api::V1::SearchesController < ApplicationController
     search = params[:name]
     search_date = params[:date]
     if search && search_date
-      @nearby_events = Event.where("name ILIKE ? ANDmmm  DATE(start_time) =? ",  '%'+search+'%', search_date)
+      @nearby_events = Event.where("name ILIKE ? AND  DATE(start_time) =? ",  '%'+search+'%', search_date)
     elsif search
       @nearby_events = Event.where("name ILIKE ?", '%'+search+'%')
     elsif search_date
