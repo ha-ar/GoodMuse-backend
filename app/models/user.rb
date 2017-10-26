@@ -16,7 +16,8 @@ class User < ApplicationRecord
   has_many :playlists
   has_many :events
   has_many :going_statuses
-
+  has_many :followers, :class_name => 'Following', :foreign_key => 'user_id'
+  has_many :following, :class_name => 'Following', :foreign_key => 'follower_id' 
 
   def email_required?
   	false

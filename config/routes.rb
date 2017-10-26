@@ -60,16 +60,28 @@ Rails.application.routes.draw do
 			end
 			
 			resources :songs 
+			
 			resources :questions do
 				collection do
 					get :view_question
 				end
 			end
+			
 			resources :going_statuses do
 				collection do
 					get :is_going
 				end
 			end
+			
+			resources :followings do
+				collection do
+					get :all_followers
+					get :all_following
+					post :follow
+					post :unfollow
+				end
+			end
+
 			resources :genres, :only => [:index]
 
 
