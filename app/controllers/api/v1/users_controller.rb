@@ -63,6 +63,15 @@ class Api::V1::UsersController < ApplicationController
 
             def user_detail 
               if !@user.blank?
+                @likes = 0                    
+                if @user.roles.first.present? && @user.roles.first.name == "dj"
+                  all_likes = GoingStatus.where(going_status: true).includes(:user)
+                  all_likes.each do |like|
+                    if like.event.user == @user
+                      @likes = @likes + 1
+                    end
+                  end
+                end
                 render :show
               else
                 render :json => {

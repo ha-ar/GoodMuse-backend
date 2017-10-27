@@ -5,6 +5,7 @@
     json.last_name     @user.last_name
     json.username      @user.username
     json.role          @user.roles.first.try(:name)
+    json.likes         @likes
     json.phone_number  @user.phone_number
     json.avatar        @user.image_url
     json.fcm_key       @user.fcm_key
