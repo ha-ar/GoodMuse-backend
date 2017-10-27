@@ -244,13 +244,37 @@ class Api::V1::EventsController < ApplicationController
                           end
 
 
-                          private 
+                          def event_likes
+                            if params[:event_id].present?
+                              @likes = GoingStatus.where(event_id: params[:event_id], going_status: true).includes(:user)                    
 
-                          def event_params
-                            params.require(:event).permit(:genre_event_id, :user_id, :name, :start_time, :venu_name, :address, :zip_code, :end_time, :price, :trainers_allowed, :upload_flyer, :playlist_tag, :longitude, :latitude)
-                          end
+                              if @likes.present?
+                                render :event_likes
+                              else
+                                render :json => {
+                                  :message => "No User Going To This Event.", 
+                                  :success => false
+                                  }, :status => 400
+                                end
 
-                          def get_event
-                            @event = Event.find_by_id(params[:id])
-                          end
-                        end
+
+                              else
+                                render :json => {
+                                  :message => "Check Parameters!", 
+                                  :success => false
+                                  }, :status => 400
+                                end
+
+                              end
+
+
+                              private 
+
+                              def event_params
+                                params.require(:event).permit(:genre_event_id, :user_id, :name, :start_time, :venu_name, :address, :zip_code, :end_time, :price, :trainers_allowed, :upload_flyer, :playlist_tag, :longitude, :latitude)
+                              end
+
+                              def get_event
+                                @event = Event.find_by_id(params[:id])
+                              end
+                            end

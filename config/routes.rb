@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 					post :update_event
 					post :delete_event
 					get :going_to_events
+					get :event_likes
 				end
 			end
 			resources :searches do 
