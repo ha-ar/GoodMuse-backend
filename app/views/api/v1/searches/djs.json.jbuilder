@@ -5,6 +5,15 @@
     json.last_name     user.last_name
     json.username      user.username
     json.phone_number  user.phone_number
+    follow = false
+    if current_user.present?
+      following = Following.find_by(user_id: user.id, follower_id: current_user.id)
+      if following.present?
+        follow = true
+      end
+    end
+    json.following  follow
+
 
     latest_event = user.events.where("date >= ?", Date.today).first
 
