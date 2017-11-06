@@ -5,26 +5,10 @@
     json.last_name     user.last_name
     json.username      user.username
     json.phone_number  user.phone_number
-    follow = false
-    if current_user.present?
-      following = Following.find_by(user_id: user.id, follower_id: current_user.id)
-      if following.present?
-        follow = true
-      end
-    end
-    json.following  follow
+    json.following     is_following(user.id)
 
-
-    latest_event = user.events.where("date >= ?", Date.today).first
-
-    if latest_event.present? && latest_event.playlists.present? && @song_count.present?
-      playlist_song_ids = latest_event.playlists.first.songs.pluck(:id)
-      hash_value = (playlist_song_ids & @song_ids).length
-      percentage_value = ((hash_value.to_f / @song_count.to_f) * 100).round(1)
-    else
-      playlist_song_ids = nil
-      percentage_value = nil
-    end
+    latest_event = user.events.where("start_time >= ?", Date.today).first
+    percentage_value = percentage_value(user,@song_count,latest_event)
 
     json.event  do
       json.id                   latest_event.try(:id)
@@ -32,7 +16,7 @@
       json.start_time           latest_event.try(:start_time)
       json.end_time             latest_event.try(:end_time)
       json.avatar               latest_event.try(:image_url)
-      json.avatar2               latest_event.try(:image_2_url)
+      json.avatar2              latest_event.try(:image_2_url)
       json.percentage_match     percentage_value
 
     end
