@@ -20,16 +20,14 @@ module ApplicationHelper
 		return false
 	end
 
-	def percentage_value(user,user_soung_count,latest_event)
-
-		if latest_event.present? && latest_event.playlists.present? && user_soung_count.present?
-			playlist_song_ids = latest_event.playlists.first.songs.pluck(:id)
+	def percentage_value(user_song_count,event)
+		if event.present? && event.playlists.present? && user_song_count.present?
+			playlist_song_ids = event.playlists.first.songs.pluck(:id)
 			hash_value = (playlist_song_ids & @song_ids).length
-			percentage_value = ((hash_value.to_f / user_soung_count.to_f) * 100).round(1)
+			percentage_value = ((hash_value.to_f / user_song_count.to_f) * 100).round(1)
 		else
 			percentage_value = nil
 		end
-
 	end
 
 

@@ -29,14 +29,7 @@ json.events  @events do |event|
     json.title         event.genre_event.try(:title)
   end
 
-  if event.playlists.present? && @song_count.present?
-    playlist_song_ids = event.playlists.first.songs.pluck(:id)
-    hash_value = (playlist_song_ids & @song_ids).length
-    percentage_value = ((hash_value.to_f / @song_count.to_f) * 100).round(1)
-  else
-    playlist_song_ids = nil
-    percentage_value = nil
-  end
+  percentage_value = percentage_value(@song_count,event)
 
   json.playlist do
     json.id                   event.playlists.first.try(:id)

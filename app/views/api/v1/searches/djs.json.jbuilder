@@ -8,7 +8,7 @@
     json.following     is_following(user.id)
 
     latest_event = user.events.where("start_time >= ?", Date.today).first
-    percentage_value = percentage_value(user,@song_count,latest_event)
+    percentage_value = percentage_value(@song_count,latest_event)
 
     json.event  do
       json.id                   latest_event.try(:id)
