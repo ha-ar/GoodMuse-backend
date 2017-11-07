@@ -17,6 +17,7 @@ json.events  @events do |event|
   json.created_at         event.created_at
   json.updated_at         event.updated_at
   json.going              event.is_going(@user.id)
+  json.percentage_match     percentage_value(@song_count,event)
 
   json.dj  do
     json.id            event.user.id
@@ -29,12 +30,10 @@ json.events  @events do |event|
     json.title         event.genre_event.try(:title)
   end
 
-  percentage_value = percentage_value(@song_count,event)
 
   json.playlist do
     json.id                   event.playlists.first.try(:id)
     json.title                event.playlists.first.try(:title)
-    json.percentage_match     percentage_value
   end
 end
 
