@@ -25,6 +25,8 @@
       json.avatar2            latest_event.try(:image_2_url)
       json.latitude           latest_event.try(:latitude)
       json.longitude          latest_event.try(:longitude)
+      json.description        latest_event.try(:description)
+
       json.created_at         latest_event.try(:created_at)
       json.updated_at         latest_event.try(:updated_at)
       json.going              current_user_event_going_status(latest_event.id)

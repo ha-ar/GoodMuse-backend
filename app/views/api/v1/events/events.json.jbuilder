@@ -11,9 +11,11 @@ json.events  @events.each do |event|
   json.price              event.price
   json.trainers_allowed   event.trainers_allowed
   json.avatar             event.image_url
-  json.avatar2             event.image_2_url
+  json.avatar2            event.image_2_url
   json.latitude           event.latitude
   json.longitude          event.longitude
+  json.description        event.description
+
   json.created_at         event.created_at
   json.updated_at         event.updated_at
 

@@ -14,10 +14,11 @@ json.events  @events do |event|
   json.avatar2            event.image_2_url
   json.latitude           event.latitude
   json.longitude          event.longitude
+  json.description        event.description
   json.created_at         event.created_at
   json.updated_at         event.updated_at
   json.going              event.is_going(@user.id)
-  json.percentage_match     percentage_value(@song_count,event)
+  json.percentage_match   percentage_value(@song_count,event)
 
   json.dj  do
     json.id            event.user.id
