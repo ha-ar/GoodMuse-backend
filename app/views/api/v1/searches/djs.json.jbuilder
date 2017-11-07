@@ -11,7 +11,7 @@
     percentage_value = percentage_value(@song_count,latest_event)
 
     json.event  do
-      
+
       json.id                 latest_event.try(:id)
       json.name               latest_event.try(:name)
       json.start_time         latest_event.try(:start_time)
@@ -27,8 +27,8 @@
       json.longitude          latest_event.try(:longitude)
       json.created_at         latest_event.try(:created_at)
       json.updated_at         latest_event.try(:updated_at)
-
-      json.percentage_match     percentage_value
+      json.going              current_user_event_going_status(latest_event.id)
+      json.percentage_match   percentage_value
 
     end
 

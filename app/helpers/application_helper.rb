@@ -9,6 +9,16 @@ module ApplicationHelper
 		end
 	end
 
+	def current_user_event_going_status(event_id)
+		if current_user.present?
+			status = GoingStatus.where(event_id: event_id,user_id: current_user.id).first
+			if status.present?
+				return status.going_status
+			end
+		end
+		false
+	end
+
 
 	def is_following(dj_id)
 		if current_user.present?
